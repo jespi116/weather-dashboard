@@ -14,17 +14,19 @@
     </header>
     <div id="container" class="col-12" >
         <div class="row">
-            <div class="col-4">
+            <div class="col-4 d-block">
                 <h3>Search for a City:</h3>
-                <form id="submit-btn">
+                <form id="submit-btn" class="inline-block">
                     <input id="city-name" type="text" class="align-middle"/>
                     <button type="submit" class="bg-primary text-white btn align-middle"><span class="oi oi-magnifying-glass"></span></button>
                 </form>
-                <ul id="city-list"></ul>
+                <div class="row">
+                    <ul id="city-list" class="city-list"></ul>
+                </div>
             </div>
             <div id="containerTwo" class="col-8">
-                
             </div>
+            
         </div>
         
     </div>

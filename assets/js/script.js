@@ -2,6 +2,7 @@
 var cityEl = document.getElementById("city-name");
 var submitBtn = document.getElementById("submit-btn");
 var ContainerTwo = document.getElementById("containerTwo");
+var ulEl = document.getElementById("city-list");
 
 
 var getInfo = function(event){
@@ -29,6 +30,16 @@ var getInfo = function(event){
     }
 };
 
+var recentSearch = function(search){
+    var apiUrl = "https://api.openweathermap.org/data/2.5/weather?q=" + search + "&units=imperial&appid=f4b298376e14c62eae2d80f4db99a6db";
+        fetch(apiUrl).then(function(response){
+                response.json().then(function(data){
+                    
+                    displayCast(data);
+                });
+        });
+};
+
 var displayCast = function(data){
 
     var storeCity = data.name;
@@ -37,6 +48,7 @@ var displayCast = function(data){
         city.push(storeCity);
     
         localStorage.setItem('city', JSON.stringify(city));
+        displayStorage();
     }
     ContainerTwo.textContent = "";
     var currentCast = document.createElement("div");
@@ -94,6 +106,25 @@ var displayCast = function(data){
     });
 };
 
+var displayStorage = function(){
+    ulEl.innerHTML = "";
+    var citiesEl = JSON.parse(localStorage.getItem('city')) || [];
+    console.log(citiesEl)
+
+    for(i=0; i < citiesEl.length; i++){
+        var city = document.createElement("li")
+        city.setAttribute("class", "card city");
+        city.setAttribute("id", [i]);
+        city.textContent = citiesEl[i];
+        ulEl.appendChild(city);
+
+        $(city).click(function(){
+            recentSearch(this.innerHTML);
+        })
+
+    }
+}
+
 
 
 var displayFive = function(five){
@@ -143,4 +174,5 @@ var displayFive = function(five){
     
 }
 
+displayStorage();
 submitBtn.addEventListener("submit", getInfo);

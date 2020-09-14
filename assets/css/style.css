@@ -30,3 +30,12 @@ h6{
     width:50px;
 }
 
+.city-list{
+    width:100%;
+    margin-top: 10px;;
+}
+
+.city{
+    padding: 15px 40px;
+    font-size: large;
+}
