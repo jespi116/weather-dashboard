@@ -1,0 +1,19 @@
+.uv{
+    padding: 5px;
+}
+
+#current-cast{
+    padding: 10px 5px 40px;
+}
+
+#current-cast > div{
+    padding: 10px;
+}
+
+#five-day{
+    padding-top: 15px;
+}
+
+.daily{
+    margin: 0 10px;
+}
