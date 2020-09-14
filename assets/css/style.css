@@ -17,3 +17,16 @@
 .daily{
     margin: 0 10px;
 }
+
+h6{
+    padding-top: 15px;
+}
+
+.daily > div {
+    padding-bottom: 15px;
+}
+
+.img{
+    width:50px;
+}
+

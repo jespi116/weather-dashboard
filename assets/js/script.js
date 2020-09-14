@@ -1,47 +1,76 @@
 
 var cityEl = document.getElementById("city-name");
 var submitBtn = document.getElementById("submit-btn");
-var currentCastEl = document.getElementById("current-cast");
-var fiveDayEl = document.getElementById("five-day");
+var ContainerTwo = document.getElementById("containerTwo");
 
-var CityName = cityEl;
-var apiUrl = "https://api.openweathermap.org/data/2.5/weather?q=atlanta&units=imperial&appid=f4b298376e14c62eae2d80f4db99a6db";
-var api = fetch(apiUrl).then(function(response){
-    if(response.ok){
-        response.json().then(function(data){
-            console.log(data);
-            console.log(data.main.temp)
-            displayCast(data);
+
+var getInfo = function(event){
+    
+    event.preventDefault();
+    
+    var CityName = cityEl.value.trim();
+    if(CityName){
+        cityEl.value = "";
+        var apiUrl = "https://api.openweathermap.org/data/2.5/weather?q=" + CityName + "&units=imperial&appid=f4b298376e14c62eae2d80f4db99a6db";
+        fetch(apiUrl).then(function(response){
+            if(response.ok){
+                response.json().then(function(data){
+                    
+                    displayCast(data);
+                });
+            };
+            if(!response.ok){
+                alert("Please enter a valid city name.")
+            }
         });
-    };
-});
+    }
+    else{
+        alert("Please enter a city name.")
+    }
+};
 
 var displayCast = function(data){
-    var titleEl = document.createElement("h2");
-    titleEl.textContent = data.name + ' (' + moment().format('l') + ')';
 
-    var iconCode =data.weather[0].icon;
+    var storeCity = data.name;
+    var city = JSON.parse(localStorage.getItem('city')) || [];
+    if(city.indexOf(storeCity) == -1){
+        city.push(storeCity);
+    
+        localStorage.setItem('city', JSON.stringify(city));
+    }
+    ContainerTwo.textContent = "";
+    var currentCast = document.createElement("div");
+    
+    currentCast.setAttribute("id", "current-cast");
+    currentCast.setAttribute("class", "card");
+    ContainerTwo.appendChild(currentCast);
+    
+
+    var titleEl = document.createElement("h2");
+    titleEl.textContent = data.name + ' (' + moment().format('l') + ') ';
+
+    var iconCode = data.weather[0].icon;
     var iconUrl = "http://openweathermap.org/img/w/" + iconCode + ".png"; 
     var iconSpan = document.createElement("img");
     iconSpan.setAttribute("src", iconUrl);
     iconSpan.setAttribute("alt", "weather icon");
 
     titleEl.appendChild(iconSpan);
-    currentCastEl.appendChild(titleEl);
+    currentCast.appendChild(titleEl);
 
     var tempEl = document.createElement("div");
-    tempEl.textContent = 'Temperature: ' + data.main.temp.toFixed(2) + '° F';
-    currentCastEl.appendChild(tempEl);
+    tempEl.textContent = 'Temperature: ' + data.main.temp + '° F';
+    currentCast.appendChild(tempEl);
 
     var humidityEl = document.createElement("div");
     humidityEl.textContent = 'Humidity: ' + data.main.humidity + '%';
-    currentCastEl.appendChild(humidityEl);
+    currentCast.appendChild(humidityEl);
 
     var windEl = document.createElement("div");
     windEl.textContent = 'Wind Speed: ' + data.wind.speed + 'MPH';
-    currentCastEl.appendChild(windEl);
+    currentCast.appendChild(windEl);
 
-    var apiFive = "https://api.openweathermap.org/data/2.5/forecast?q=" + data.name + "&appid=f4b298376e14c62eae2d80f4db99a6db";
+    var apiFive = "https://api.openweathermap.org/data/2.5/forecast?q=" + data.name + "&units=imperial&appid=f4b298376e14c62eae2d80f4db99a6db";
     fetch(apiFive).then(function(response){
         response.json().then(function(five){
             displayFive(five);
@@ -51,14 +80,7 @@ var displayCast = function(data){
     var apiUv = "http://api.openweathermap.org/data/2.5/uvi?appid=f4b298376e14c62eae2d80f4db99a6db&lat=" + data.coord.lat + "&lon=" + data.coord.lon;
     fetch(apiUv).then(function(response){
         response.json().then(function(uv){
-            displayUv(uv);
-        });
-        
-    });
-};
-
-var displayUv = function(uv){
-    var uvEl = document.createElement("div");
+            var uvEl = document.createElement("div");
     uvEl.innerHTML = "UV Index: ";
 
     var uvVal = document.createElement("span");
@@ -66,10 +88,21 @@ var displayUv = function(uv){
     uvVal.textContent = uv.value;
 
     uvEl.appendChild(uvVal);
-    currentCastEl.appendChild(uvEl);
+    currentCast.appendChild(uvEl);
+        });
+        
+    });
 };
 
+
+
 var displayFive = function(five){
+
+    var fiveDayEl = document.createElement("div");
+    fiveDayEl.textContent = "";
+    fiveDayEl.setAttribute("id", "five-day");
+    ContainerTwo.appendChild(fiveDayEl);
+
     var dailyTitle = document.createElement("h2");
     dailyTitle.textContent = "5 Day Forecast: "
     fiveDayEl.appendChild(dailyTitle);
@@ -83,10 +116,31 @@ var displayFive = function(five){
     console.log(forecast)
     for(i=7; i < forecast.length; i=i+8){
         var dailyEl = document.createElement("div");
-        dailyEl.setAttribute("class", "card col bg-primary text-white daily");
-        //dailyEl.textContent = forecast[i].dt_txt;
+        dailyEl.setAttribute("class", "card col-lg col-md-12 bg-primary text-white daily");
         dailyContainer.appendChild(dailyEl);
         console.log(forecast[i]);
+
+        var dailyDate = document.createElement("h6");
+        dailyDate.textContent = moment(forecast[i].dt_txt).format('l');
+        dailyEl.appendChild(dailyDate);
+
+        var iconCode = forecast[i].weather[0].icon;
+        var iconUrl = "http://openweathermap.org/img/w/" + iconCode + ".png"; 
+        var iconSpan = document.createElement("img");
+        iconSpan.setAttribute("src", iconUrl);
+        iconSpan.setAttribute("alt", "weather icon");
+        iconSpan.setAttribute("class", "img");
+        dailyEl.appendChild(iconSpan);
+
+        var dailyTemp = document.createElement("div");
+        dailyTemp.textContent = "Temp: " + forecast[i].main.temp + "° F";
+        dailyEl.appendChild(dailyTemp);
+
+        var dailyHum = document.createElement("div");
+        dailyHum.textContent = "Humidity: " + forecast[i].main.humidity + "%";
+        dailyEl.appendChild(dailyHum);
     }
     
 }
+
+submitBtn.addEventListener("submit", getInfo);
