@@ -59,6 +59,7 @@ var displayCast = function(data){
     
 
     var titleEl = document.createElement("h2");
+    titleEl.setAttribute("class", "title")
     titleEl.textContent = data.name + ' (' + moment().format('l') + ') ';
 
     var iconCode = data.weather[0].icon;
