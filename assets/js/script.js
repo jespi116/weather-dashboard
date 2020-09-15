@@ -63,7 +63,7 @@ var displayCast = function(data){
     titleEl.textContent = data.name + ' (' + moment().format('l') + ') ';
 
     var iconCode = data.weather[0].icon;
-    var iconUrl = "http://openweathermap.org/img/w/" + iconCode + ".png"; 
+    var iconUrl = "https://openweathermap.org/img/w/" + iconCode + ".png"; 
     var iconSpan = document.createElement("img");
     iconSpan.setAttribute("src", iconUrl);
     iconSpan.setAttribute("alt", "weather icon");
@@ -90,7 +90,7 @@ var displayCast = function(data){
         });
     });    
 
-    var apiUv = "http://api.openweathermap.org/data/2.5/uvi?appid=f4b298376e14c62eae2d80f4db99a6db&lat=" + data.coord.lat + "&lon=" + data.coord.lon;
+    var apiUv = "https://api.openweathermap.org/data/2.5/uvi?appid=f4b298376e14c62eae2d80f4db99a6db&lat=" + data.coord.lat + "&lon=" + data.coord.lon;
     fetch(apiUv).then(function(response){
         response.json().then(function(uv){
             var uvEl = document.createElement("div");
