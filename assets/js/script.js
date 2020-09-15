@@ -63,7 +63,7 @@ var displayCast = function(data){
     titleEl.textContent = data.name + ' (' + moment().format('l') + ') ';
 
     var iconCode = data.weather[0].icon;
-    var iconUrl = "https://openweathermap.org/img/w/" + iconCode + ".png"; 
+    var iconUrl = "http://openweathermap.org/img/w/" + iconCode + ".png"; 
     var iconSpan = document.createElement("img");
     iconSpan.setAttribute("src", iconUrl);
     iconSpan.setAttribute("alt", "weather icon");
