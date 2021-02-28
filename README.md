@@ -8,7 +8,6 @@ A fully dynamic weather webpage programmed with javascript with information prov
 
 * Javascript
 * Node.js
-* Express.js
 * HTML
 * CSS
 * Openweathermap API
