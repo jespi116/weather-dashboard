@@ -7,7 +7,6 @@ A fully dynamic weather webpage programmed with javascript with information prov
 ## Technologies used:
 
 * Javascript
-* Node.js
 * HTML
 * CSS
 * Openweathermap API
